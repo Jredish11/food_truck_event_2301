@@ -20,5 +20,9 @@ class FoodTruck
       @inventory[item] = quantity
     end
   end
+
+  def potential_revenue
+    
+  end
   
 end

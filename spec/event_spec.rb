@@ -62,40 +62,76 @@ RSpec.describe Event do
       expect(@event.food_trucks_that_sell(@item4)).to eq([@food_truck2])
     end
   end
+
+  describe "#overstocked_items"
+    it 'Return a list of overstocked Items for an Event' do
+      @food_truck1.stock(@item1, 35)
+      @food_truck1.stock(@item2, 7)
+      @food_truck2.stock(@item3, 25)
+      @food_truck2.stock(@item4, 50)
+      @food_truck3.stock(@item1, 65)
+
+      expect(@event.overstocked_items).to eq([@item1])
+
+      @food_truck3.stock(@item3, 26)
+
+      expect(@event.overstocked_items).to eq([@item1, @item3])
+    end
+
+    it 'sorted_item_list that returns a list of names of all items the FoodTrucks have in stock, sorted alphabetically' do 
+      @food_truck1.stock(@item1, 35)
+      @food_truck1.stock(@item2, 7)
+      @food_truck2.stock(@item3, 25)
+      @food_truck2.stock(@item4, 50)
+      @food_truck3.stock(@item1, 65)
+
+      @event.add_food_truck(@food_truck1)
+      @event.add_food_truck(@food_truck2)
+      @event.add_food_truck(@food_truck3)
+
+      expect(@event.sorted_item_list).to eq(['Apple Pie (Slice)', "Banana Nice Cream", 'Peach Pie (Slice)', "Peach-Raspberry Nice Cream"])
+    end
+
+    it 'reports the quantities of all items sold at the event' do
+      @food_truck1.stock(@item1, 35)
+      @food_truck1.stock(@item2, 7)
+      @food_truck2.stock(@item3, 25)
+      @food_truck2.stock(@item4, 50)
+      @food_truck3.stock(@item1, 65)
+
+      @event.add_food_truck(@food_truck1)
+      @event.add_food_truck(@food_truck2)
+      @event.add_food_truck(@food_truck3)
+
+      expected = { @item1 => {  'Quantity' => 100,
+                                'Food_Trucks' => [@food_truck1, @food_truck3] },
+                    @item2 => {  'Quantity' => 7,
+                                'Food_Trucks' => [@food_truck1] },
+                    @item3 => {  'Quantity' => 25,
+                                'Food_Trucks' => [@food_tuck2] },
+                    @item4 => {  'Quantity' => 50,
+                                'Food_Trucks' => [@food_tuck2] },
+                  }     
+        expect(@event.total_inventory).to eq(expected)
+  end
 end
 
-
-
-
-
-
-# Graded Items:
-
-
-
-# 5. Return the potential revenue from a FoodTruck: `FoodTruck #potential_revenue`
-
-# A FoodTruck will be able to calculate their potential_revenue - the sum of all their items' price * quantity.
-
-# A Event is responsible for keeping track of FoodTrucks. It should have a method called food_truck_names that returns an array of all the FoodTruck's names.
-
-# Additionally, the Event should have a method called food_trucks_that_sell that takes an argument of an item represented as a String. It will return a list of FoodTrucks that have that item in stock.
+ 
+    
 
 
 
 
 
 
+                # Graded Items:
+          #  1. Return a list of overstocked Items for an Event: `Event #overstocked_items`
+          #  1. Return a hash of total inventory from an Event: `Event #total_inventory`
+          # 
+          # Your Event will be able to identify overstocked_items. An item is overstocked if it is sold by more than 1 food truck AND the total quantity is greater than 50.
+
+
+          # Additionally, your Event class should have a method called total_inventory that reports the quantities of all items sold at the event. Specifically, it should return a hash with items as keys and hash as values - this sub-hash should have two key/value pairs: quantity pointing to total inventory for that item and food_trucks pointing to an array of the food trucks that sell that item.
 
 
 
-
-
-# pry(main)> food_truck1.potential_revenue
-# #=> 148.75
-
-# pry(main)> food_truck2.potential_revenue
-# #=> 345.00
-
-# pry(main)> food_truck3.potential_revenue
-# #=> 243.75  

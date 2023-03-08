@@ -34,11 +34,11 @@ class Event
 
   def total_inventory
     inventory = {}
-    inventory[item] = { "Quantity" => quantity, "Food_Trucks" => food_trucks_that_sell(item) }
+    inventory[item] = { "Quantity" => stock_quantity, "Food_Trucks" => food_trucks_that_sell(item) }
   end
 
   def overstocked_items
-    quantity= @food_trucks.sum do |food_truck|
+    quantity = @food_trucks.sum do |food_truck|
       food_truck.inventory[item]
     end
     sold_by = @food_trucks.count do |food_truck|
@@ -53,7 +53,7 @@ class Event
   
   #helper methods
   
-  def quantity
+  def stock_quantity
     @food_trucks.each do |food_truck|
       food_truck.inventory.each do |item, quantity|
         quantity

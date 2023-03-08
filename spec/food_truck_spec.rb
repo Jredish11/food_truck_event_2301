@@ -8,44 +8,34 @@ RSpec.describe FoodTruck do
     @item1 = Item.new({name: 'Peach Pie (Slice)', price: "$3.75"})
     @item2 = Item.new({name: 'Apple Pie (Slice)', price: '$2.50'})
   end
+
+  describe "#initialize" do
+    it 'exits and has attributes' do
+      expect(@food_truck).to be_an FoodTruck
+      expect(@food_truck.name).to eq("Rocky Mountain Pies")
+    end
+
+    it 'has inventory list, checks stock, adds stock to inventory' do
+      expect(@food_truck.inventory).to eq({})
+      expect(@food_truck.check_stock(@item1)).to eq(0)
+
+      @food_truck.stock(@item1, 30)
+
+      expect(@food_truck.inventory).to eq({@item1 => 30})
+
+      expect(@food_truck.check_stock(@item1)).to eq(30)
+
+      @food_truck.stock(@item1, 25)
+
+      expect(@food_truck.check_stock(@item1)).to eq(55)
+
+      @food_truck.stock(@item2, 12)
+
+      expect(@food_truck.inventory).to eq({@item1 => 55, @item2 => 12})
+    end
+  end
 end
 
 
 
 
-# Graded Items:
-# 2. Create a FoodTruck with attributes: `FoodTruck.new`
-# 3. Check quantity of an Item on the FoodTruck: `FoodTruck #check_stock`
-# 4. Stock an Item on the FoodTruck: `FoodTruck #stock`
-# The Event will need to keep track of its FoodTrucks and their Items. Each FoodTruck will be able to report its total inventory, stock items, and return the quantity of items. Any item not in stock should return 0 by default.
-
-
-
-
-
-# pry(main)> food_truck.name
-# #=> "Rocky Mountain Pies"
-
-# pry(main)> food_truck.inventory
-# #=> {}
-
-# pry(main)> food_truck.check_stock(item1)
-# #=> 0
-
-# pry(main)> food_truck.stock(item1, 30)
-
-# pry(main)> food_truck.inventory
-# #=> {#<Item:0x007f9c56740d48...> => 30}
-
-# pry(main)> food_truck.check_stock(item1)
-# #=> 30
-
-# pry(main)> food_truck.stock(item1, 25)
-
-# pry(main)> food_truck.check_stock(item1)
-# #=> 55
-
-# pry(main)> food_truck.stock(item2, 12)
-
-# pry(main)> food_truck.inventory
-# #=> {#<Item:0x007f9c56740d48...> => 55, #<Item:0x007f9c565c0ce8...> => 12}
